@@ -1,0 +1,169 @@
+{
+  "pluginAlias": "SuplaGarageDoorOpener",
+  "pluginType": "accessory",
+  "singular": false,
+  "schema": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "title": "Name",
+        "type": "string",
+        "default": "Garage Door",
+        "required": true
+      },
+      "serial": {
+        "title": "Serial Number",
+        "type": "string",
+        "default": "SUPLA 000001"
+      },
+      "host": {
+        "title":"Domain",
+        "type": "string",
+        "required": true
+      },
+      "port": {
+        "Title":"Port",
+        "type": "integer",
+        "default": "443"
+      },
+      "open_close": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "title": "code",
+            "type": "string",
+            "required": true
+          },
+          "action": {
+            "title": "action",
+            "type": "string",
+            "default": "open-close",
+            "required": true
+          },
+          "path": {
+            "title": "path",
+            "type": "string",
+            "required": true
+          }
+        }
+      },
+      "close_state": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "title": "code",
+            "type": "string",
+            "required": true
+          },
+          "action": {
+            "title": "action",
+            "type": "string",
+            "default": "read",
+            "required": true
+          },
+          "path": {
+            "title": "path",
+            "type": "string",
+            "required": true
+          }
+        }
+      },
+      "open_state": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "title": "code",
+            "type": "string",
+            "required": false
+          },
+          "action": {
+            "title": "action",
+            "type": "string",
+            "default": "read",
+            "required": false
+          },
+          "path": {
+            "title": "path",
+            "type": "string",
+            "required": false
+          }
+        }
+      },
+      "status_update_delay": {
+        "title": "Status Update Delay",
+        "type": "string",
+        "default": "15",
+        "placeholder": "# of seconds to open or close the door",
+        "required": true
+      },
+      "poll_state_delay": {
+        "title": "Enable Polling (in seconds)",
+        "type": "integer",
+        "default": "2",
+        "placeholder": "# of seconds, 0 - polling disabled"
+      },
+      "check_cmd_delay": {
+        "title": "Status delay after open/close command",
+        "type": "integer",
+        "default": "3",
+        "placeholder": "# of seconds"
+      }
+    }
+  },
+  "form": [
+    "name",
+    "host",
+    "port",
+    {
+      "type":"fieldset",
+      "title": "Command to open/close door",
+      "description": "Supla command to open/close the door",
+      "items": [
+        "open_close.code",
+        "open_close.action",
+        "open_close.path"
+      ]
+    },
+    {
+      "type":"fieldset",
+      "title": "Close door state check command",
+      "description": "Supla command to check the door close state",
+      "items": [
+        "close_state.code",
+        "close_state.action",
+        "close_state.path"
+      ]
+    },
+    {
+      "type":"fieldset",
+      "expandable": true,
+      "title": "Open door state check command",
+      "description": "Supla command to check the door open state",
+      "items": [
+        "open_state.code",
+        "open_state.action",
+        "open_state.path"
+      ]
+    },
+    {
+      "type": "fieldset",
+      "expandable": true,
+      "title": "Polling Settings",
+      "description": "Options for polling Garage Door when Home app is closed",
+      "items": [
+        "poll_state_delay"
+      ]
+    },
+    {
+      "type": "fieldset",
+      "expandable": true,
+      "title": "Advanced Settings",
+      "description": "Don't change these, unless you understand what you're doing.",
+      "items": [
+         "status_update_delay",
+         "check_cmd_delay"
+      ]
+    }
+  ],
+  "display": null
+}
