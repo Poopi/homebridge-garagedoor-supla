@@ -242,7 +242,7 @@ class GarageSuplaAccessory {
     this.getStateFromSupla( function (error, close_state, open_state ){
       if (error) {
         accessory.log('Error: ' + error);
-        callback(error || new Error('Error getting ' + accessory.name + ' state '));
+        callback(error || new Error('Error getting ' + accessory.name + ' state ', this.curState));
       }
       else {
         let CHS = Characteristic.CurrentDoorState;
@@ -286,6 +286,16 @@ class GarageSuplaAccessory {
         },
         isCommand ? this.checkCmdStatusDelay : this.pollStateDelay
       );
+    }
+    else {
+      accessory.getState(function (error, currentDeviceState) {
+        if (error) {
+          accessory.log(error);
+        }
+        else {
+          that.updatePosition(currentDeviceState, UpdateContext.POLLING);
+        }
+      })
     }
   }
 
