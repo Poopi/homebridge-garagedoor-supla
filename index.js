@@ -215,7 +215,7 @@ class GarageSuplaAccessory {
           else {
             try {
               let result = JSON.parse(responseBody);
-              resolve(result.hi);
+              resolve(result);
             } catch (error) {
               accessory.log("Error:" + error);
               reject(error);
@@ -239,19 +239,30 @@ class GarageSuplaAccessory {
 
   getState(callback) {
     var accessory = this;
+    var that = this;
     this.getStateFromSupla( function (error, close_state, open_state ){
       if (error) {
         accessory.log('Error: ' + error);
-        callback(error || new Error('Error getting ' + accessory.name + ' state ', this.curState));
+        callback(error || new Error('Error getting ' + accessory.name + ' state ', that.curState));
       }
       else {
         let CHS = Characteristic.CurrentDoorState;
         //accessory.log('Get state from supla:' + close_state + ' | ' + open_state);
         if (open_state != null) {
-          callback(null, close_state ? CHS.CLOSED : (open_state ? CHS.OPEN : null));
+          if (close_state.connected == true && open_state.connected == true) {
+              callback(null, close_state.hi ? CHS.CLOSED : (open_state.hi ? CHS.OPEN : null));
+          }
+          else{
+            callback(null, that.curState);
+          }
         }
         else {
-          callback(null, close_state ? CHS.CLOSED:CHS.OPEN);
+          if(close_state.connected == true) {
+            callback(null, close_state.hi ? CHS.CLOSED : CHS.OPEN);
+          }
+          else {
+            callback(null, that.curState);
+          }
         }
       }
     });
